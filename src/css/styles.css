@@ -12,7 +12,7 @@ body {
 
 .carousel {
   display: grid;
-  grid-template-columns: 3em 800px 3em;
+  grid-template-columns: 3em 80vw 3em;
   grid-template-rows: 70vh 3em;
   align-items: center;
   grid-gap: 1em;
@@ -44,14 +44,6 @@ body {
   position: absolute;
   width: inherit;
   height: inherit;
-}
-
-.carousel__slide:nth-child(2) {
-  left: 800px;
-}
-
-.carousel__slide:nth-child(3) {
-  left: 1600px;
 }
 
 .carousel__slide > a {
