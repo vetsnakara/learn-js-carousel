@@ -69,32 +69,43 @@ nextButton.addEventListener('click', e => {
 })
 
 // click on dot
-dots.forEach((dot, i) => {
-  dot.addEventListener('click', e => {
-    const slideToShow = slides[i]
+dotsContainer.addEventListener('click', e => {
+  const dot = e.target
+  const isDotClicked = dot.matches('.carousel__dot');
+
+  if (isDotClicked) {
+    // get index of clicked dot
+    let index;
+    for (let i = 0; i < dots.length; i++) {
+      if (dots[i] === dot) {
+        index = i;
+        break;
+      }
+    }
+
+    // move slide
+    const slideToShow = slides[index]
     const destination = getComputedStyle(slideToShow).left
+    contents.style.left = `-${destination}`
 
     // set selected dot
     dots.forEach(dot => dot.classList.remove('is-selected'))
     dot.classList.add('is-selected')
-
-    // move slide
-    contents.style.left = `-${destination}`
 
     // set current slide
     slides.forEach(slide => slide.classList.remove('is-selected'))
     slideToShow.classList.add('is-selected')
 
     // show/hide buttons
-    if (i === 0) {
+    if (index === 0) {
       nextButton.removeAttribute('hidden')
       prevButton.setAttribute('hidden', true)
-    } else if (i === dots.length - 1) {
+    } else if (index === dots.length - 1) {
       nextButton.setAttribute('hidden', true)
       prevButton.removeAttribute('hidden')
     } else {
       prevButton.removeAttribute('hidden')
       nextButton.removeAttribute('hidden')
     }
-  })
+  }
 })
