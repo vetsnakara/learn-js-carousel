@@ -3,13 +3,13 @@ const carousel = document.querySelector('.carousel')
 const contents = carousel.querySelector('.carousel__contents')
 const prevButton = carousel.querySelector('.prev-button')
 const nextButton = carousel.querySelector('.next-button')
-const slides = Array.from(carousel.querySelectorAll('.carousel__slide'))
+const slides = [...carousel.querySelectorAll('.carousel__slide')]
+const dots = [...carousel.querySelectorAll('.carousel__dot')]
 const dotsContainer = carousel.querySelector('.carousel__dots')
-const dots = Array.from(carousel.querySelectorAll('.carousel__dot'))
 
 slides.forEach((slide, i) => {
   const width = slide.getBoundingClientRect().width
-  slide.style.left = i * width + 'px'
+  slide.style.left = `${i * width}px`
 })
 
 // click prev button
@@ -71,42 +71,36 @@ nextButton.addEventListener('click', e => {
 // click on dot
 dotsContainer.addEventListener('click', e => {
   const dot = e.target
-  const isDotClicked = dot.matches('.carousel__dot');
+  const isDotClicked = dot.matches('.carousel__dot')
 
-  if (isDotClicked) {
-    // get index of clicked dot
-    let index;
-    for (let i = 0; i < dots.length; i++) {
-      if (dots[i] === dot) {
-        index = i;
-        break;
-      }
-    }
+  if (!isDotClicked) return
 
-    // move slide
-    const slideToShow = slides[index]
-    const destination = getComputedStyle(slideToShow).left
+  // get index of clicked dot
+  const index = dots.findIndex(d => d === dot);
 
-    contents.style.transform = `translateX(-${destination})`
+  // move slide
+  const slideToShow = slides[index]
+  const destination = getComputedStyle(slideToShow).left
 
-    // set selected dot
-    dots.forEach(dot => dot.classList.remove('is-selected'))
-    dot.classList.add('is-selected')
+  contents.style.transform = `translateX(-${destination})`
 
-    // set current slide
-    slides.forEach(slide => slide.classList.remove('is-selected'))
-    slideToShow.classList.add('is-selected')
+  // set selected dot
+  dots.forEach(dot => dot.classList.remove('is-selected'))
+  dot.classList.add('is-selected')
 
-    // show/hide buttons
-    if (index === 0) {
-      nextButton.removeAttribute('hidden')
-      prevButton.setAttribute('hidden', true)
-    } else if (index === dots.length - 1) {
-      nextButton.setAttribute('hidden', true)
-      prevButton.removeAttribute('hidden')
-    } else {
-      prevButton.removeAttribute('hidden')
-      nextButton.removeAttribute('hidden')
-    }
+  // set current slide
+  slides.forEach(slide => slide.classList.remove('is-selected'))
+  slideToShow.classList.add('is-selected')
+
+  // show/hide buttons
+  if (index === 0) {
+    nextButton.removeAttribute('hidden')
+    prevButton.setAttribute('hidden', true)
+  } else if (index === dots.length - 1) {
+    nextButton.setAttribute('hidden', true)
+    prevButton.removeAttribute('hidden')
+  } else {
+    prevButton.removeAttribute('hidden')
+    nextButton.removeAttribute('hidden')
   }
 })
